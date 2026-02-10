@@ -1,16 +1,24 @@
 package controllers
 
-import "will_web/internal/models"
+import (
+	"html/template"
+	"will_web/internal/models"
+)
 
 type IHomeScreenController interface {
 }
 type HomeScreenController struct {
-	homeRepo models.HomeScreenModel
+	templateCache map[string]*template.Template
+	homeRepo      models.HomeScreenModel
 }
 
 // Konstruktor für den Controller
-func NewHomeScreenController(homeRepo models.HomeScreenModel) *HomeScreenController {
+func NewHomeScreenController(
+	templateCache map[string]*template.Template,
+	homeRepo models.HomeScreenModel,
+) *HomeScreenController {
 	return &HomeScreenController{
-		homeRepo: homeRepo,
+		homeRepo:      homeRepo,
+		templateCache: templateCache,
 	}
 }
