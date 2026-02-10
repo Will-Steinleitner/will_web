@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	application := will_web.Application{}
-	homeCtrl := &controllers.HomeController{HomeScreenMR: application.HomeScreenModelRepo}
+	app := will_web.NewApplication()
+	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo())
 }
