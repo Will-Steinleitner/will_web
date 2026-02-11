@@ -1,4 +1,4 @@
-package will_web
+package main
 
 import (
 	"errors"
@@ -38,7 +38,7 @@ func newTemplateCache() (map[string]*template.Template, error) {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		templateSet, err := template.ParseFiles("./ui/templates/home.html", page)
+		templateSet, err := template.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
