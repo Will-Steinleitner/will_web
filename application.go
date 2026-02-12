@@ -1,53 +1,57 @@
-package main
+package application
 
 import (
-	"errors"
 	"fmt"
 	"html/template"
+	"log"
 	"path/filepath"
+	"will_web/internal/database"
 	"will_web/internal/models"
 )
 
+const applicationTag = "Application"
+
 type Application struct {
 	fullCache map[string]*template.Template
-	homeRepo  models.HomeScreenModel
+	homeRepo  *models.HomeScreenModel
+	database  *database.Database
 }
 
 // Constructor without a receiver (a receiver would require an existing Application instance, rather than creating one).
 func NewApplication() *Application {
 	cache, err := newTemplateCache()
 	if err != nil {
-		panic(err)
+		log.Fatal(applicationTag, err)
 	}
 
-	homeRepo := &models.HomeScreenModel{}
+	db := database.NewDatabase()
+	fmt.Println(db)
+	homeRepo := models.NewHomeScreenModel(db)
+	fmt.Println(homeRepo.GetDatabase())
 
 	return &Application{
 		fullCache: cache,
-		homeRepo:  *homeRepo,
+		homeRepo:  homeRepo,
+		database:  db,
 	}
 }
+
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := make(map[string]*template.Template)
 
 	pages, err := filepath.Glob("./ui/templates/*")
-	fmt.Printf("%s", pages)
-	fmt.Println()
+	fmt.Printf("%s \n", pages)
 	if err != nil {
-		return nil, err
+		log.Fatal(applicationTag, err)
 	}
 
 	for _, page := range pages {
 		name := filepath.Base(page)
-		fmt.Printf("%s", name)
-		fmt.Println()
+		fmt.Printf("%s \n", name)
 
 		templateSet, err := template.ParseFiles(page)
-		fmt.Printf(templateSet.Name())
-		fmt.Println()
-		fmt.Println(templateSet)
 		if err != nil {
-			return nil, err
+			log.Fatal(applicationTag, err)
 		}
 
 		cache[name] = templateSet
@@ -55,17 +59,17 @@ func newTemplateCache() (map[string]*template.Template, error) {
 
 	return cache, nil
 }
-
 func (app *Application) HomeRepo() models.HomeScreenModel {
-	return app.homeRepo
+	return *app.homeRepo
 }
+func (app *Application) Database() *database.Database { return app.database }
 func (app *Application) TemplateCache() map[string]*template.Template {
 	return app.fullCache
 }
 func (app *Application) GetTemplate(name string) (*template.Template, error) {
 	templateSet, exists := app.fullCache[name]
 	if !exists {
-		return nil, errors.New("template not found")
+		log.Fatal(applicationTag, "Template not found", name)
 	}
 
 	return templateSet, nil

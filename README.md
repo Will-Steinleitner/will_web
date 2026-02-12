@@ -1,5 +1,4 @@
 # 📘 Go Web Projekt – Übersicht
-
 ---
 
 ## 🔤 Naming Conventions in Go
@@ -110,6 +109,7 @@ defer db.Close()
 ### Step 6: Mit PostgreSQL verbinden
 
 ```bash
+docker start yourcontainername
 docker exec -ti yourcontainername psql -U postgres
 ```
 
@@ -142,14 +142,22 @@ Force löschen:
 docker rm -f containername
 ```
 
+## Weitere Befehle
+
+```bash
+docker start containername
+docker stop containername
+docker restart containername
+```
+
 
 ## PostgreSQL Befehle, wenn wir mit der Datenbank verbunden sind
 
-| Befehl | Bedeutung |
-|--------|-----------|
-| `\q` | Beenden |
-| `\dt` | Tabellen anzeigen |
-| `\c databasename` | Datenbank wechseln |
+| Befehl                | Bedeutung |
+|-----------------------|-----------|
+| `\q`                  | Beenden |
+| `\dt`                 | Tabellen anzeigen |
+| `\c databasename`     | Datenbank wechseln |
 
 
 ## SQL-Abfrage ausführen, wenn wir mit der Datenbank verbunden sind

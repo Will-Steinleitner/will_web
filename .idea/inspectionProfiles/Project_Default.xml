@@ -4,6 +4,7 @@
     <inspection_tool class="GoDfaErrorMayBeNotNil" enabled="true" level="WARNING" enabled_by_default="true">
       <functions>
         <function importPath="html/template" name="ParseFiles" />
+        <function importPath="database/sql" name="Open" />
       </functions>
     </inspection_tool>
   </profile>
