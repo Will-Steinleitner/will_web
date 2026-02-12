@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"html/template"
-	"net/http"
 	"path/filepath"
 	"will_web/internal/models"
 )
@@ -30,15 +30,22 @@ func NewApplication() *Application {
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := make(map[string]*template.Template)
 
-	pages, err := filepath.Glob("./ui/templates/home.html")
+	pages, err := filepath.Glob("./ui/templates/*")
+	fmt.Printf("%s", pages)
+	fmt.Println()
 	if err != nil {
 		return nil, err
 	}
 
 	for _, page := range pages {
 		name := filepath.Base(page)
+		fmt.Printf("%s", name)
+		fmt.Println()
 
 		templateSet, err := template.ParseFiles(page)
+		fmt.Printf(templateSet.Name())
+		fmt.Println()
+		fmt.Println(templateSet)
 		if err != nil {
 			return nil, err
 		}
@@ -62,8 +69,4 @@ func (app *Application) GetTemplate(name string) (*template.Template, error) {
 	}
 
 	return templateSet, nil
-}
-
-func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
-	//app.homeController.Home()
 }
