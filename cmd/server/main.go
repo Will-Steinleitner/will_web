@@ -23,6 +23,10 @@ func main() {
 
 	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo())
 
+	fs := http.FileServer(http.Dir("./ui/static/"))
+	// http.Handle registers a handler for a specific URL pattern,
+	// e.g. it routes requests like GET /static/home.css to the file server.
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	// handle force you to implement ServeHTTP
 	http.Handle("/", homeCtrl)
 

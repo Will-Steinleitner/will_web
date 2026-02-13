@@ -60,6 +60,7 @@ func (p *WelcomeRepo) GetWelcomeMessage() string {
 - https://hub.docker.com/_/postgres
 - https://www.youtube.com/watch?v=Y7a0sNKdoQk
 - https://www.docker.com/products/docker-desktop/
+- https://www.youtube.com/watch?v=Hs9Fh1fr5s8   → pgAdmin
 
 ---
 
