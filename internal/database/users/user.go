@@ -1,8 +1,5 @@
 package users
 
-type IUserDao interface {
-}
-
 type User struct {
 	firstName string
 	lastName  string
@@ -10,8 +7,13 @@ type User struct {
 	password  string
 }
 
-func NewUser(fristName string, lastName string, email string, password string) *User {
-	return &User{firstName: fristName, lastName: lastName, email: email, password: password}
+func NewUser(firstName, lastName, email, password string) *User {
+	return &User{
+		firstName: firstName,
+		lastName:  lastName,
+		email:     email,
+		password:  password,
+	}
 }
 func (user *User) FirstName() string {
 	return user.firstName

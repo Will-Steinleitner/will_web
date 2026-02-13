@@ -6,6 +6,7 @@ import (
 	"log"
 	"path/filepath"
 	"will_web/internal/database"
+	"will_web/internal/database/users"
 	"will_web/internal/models"
 )
 
@@ -25,9 +26,9 @@ func NewApplication() *Application {
 	}
 
 	db := database.NewDatabase()
-	fmt.Println(db)
-	homeRepo := models.NewHomeScreenModel(db)
-	fmt.Println(homeRepo.GetDatabase())
+
+	userDao := users.NewUserDao(db.GetDatabase())
+	homeRepo := models.NewHomeScreenModel(userDao)
 
 	return &Application{
 		fullCache: cache,

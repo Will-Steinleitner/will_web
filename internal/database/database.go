@@ -61,7 +61,6 @@ func createTable(db *sql.DB) {
 		created_at TIMESTAMP DEFAULT NOW()
 	);
 `
-
 	if _, err := db.Exec(query); err != nil {
 		log.Fatal(err)
 	}
