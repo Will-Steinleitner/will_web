@@ -2,9 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
-	"will_web/internal/database/users"
 )
 
 type Database struct {
@@ -64,32 +62,4 @@ func createTable(db *sql.DB) {
 	if _, err := db.Exec(query); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func (database *Database) InsertUser(user *users.User) bool {
-
-	query := `
-		INSERT INTO users (first_name, last_name, email, password)
-		VALUES ($1, $2, $3, $4)
-		RETURNING id
-	`
-
-	var id int
-
-	err := database.database.
-		QueryRow(
-			query,
-			user.FirstName(),
-			user.LastName(),
-			user.Email(),
-			user.Password(),
-		).
-		Scan(&id)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(id)
-
-	return true
 }

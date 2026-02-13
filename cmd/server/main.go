@@ -14,9 +14,8 @@ const mainTag = "Main"
 
 func main() {
 	app := application.NewApplication()
-	fullCache := app.TemplateCache()
-
 	defer app.Database().Close()
+	fullCache := app.TemplateCache()
 
 	templates := map[string]*template.Template{
 		"home.html": fullCache["home.html"],
@@ -24,6 +23,7 @@ func main() {
 
 	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo())
 
+	// handle force you to implement ServeHTTP
 	http.Handle("/", homeCtrl)
 
 	log.Println("Server startet auf http://localhost:8080")

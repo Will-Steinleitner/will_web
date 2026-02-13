@@ -176,3 +176,5 @@ SELECT * FROM users;
 5. DB in Go einbinden
 6. Tabellen prüfen mit `\dt`
 7. Daten prüfen mit `SELECT * FROM users;`
+8. In Terminal: go build -o willweb.exe .\cmd\server
+9. go run ./cmd/server/

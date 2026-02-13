@@ -17,7 +17,6 @@ func NewUserDao(db *sql.DB) *UserDao {
 }
 
 func (dao *UserDao) InsertUser(user *User) bool {
-
 	query := `
 		INSERT INTO users (first_name, last_name, email, password)
 		VALUES ($1, $2, $3, $4)
