@@ -40,7 +40,7 @@ func NewApplication() *Application {
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := make(map[string]*template.Template)
 
-	pages, err := filepath.Glob("./ui/templates/*")
+	pages, err := filepath.Glob("./ui/templates/html/*")
 	fmt.Printf("%s \n", pages)
 	if err != nil {
 		log.Fatal(applicationTag, err)

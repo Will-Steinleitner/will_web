@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nova — Login</title>
+    <meta name="description" content="Builds" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/css/home.css" />
+    <script src="../../static/js/home.js" defer></script>
+</head>
+
+<!-- ======== BODY START ======== -->
+<body>
+    <!-- ======== HEADER START ======== -->
+    <header>
+        <div class="container nav">
+            <a class="brand" href="/">
+                <img class="logo" src="../../static/img/buildslogo.png" alt="Builds Logo" />
+                <span>Builds</span>
+            </a>
+
+            <nav class="navlinks" aria-label="Hauptnavigation">
+                <a class="navlinkWithImg" href="#nightreign">
+                    <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                    <span>Nightreign</span>
+                </a>
+            </nav>
+
+            <div class="navcta">
+                <button class="btn primary" type="button" id="openLogin">Anmelden</button>
+            </div>
+        </div>
+
+    </header>
+    <!-- ======== HEADER END ======== -->
+
+    <!-- ===== LOGIN MODAL START ===== -->
+    <div class="login-modal" id="loginModal" aria-hidden="true">
+        <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <button class="close-btn" id="closeLogin" type="button" aria-label="Schließen">&times;</button>
+
+            <div class="flip" id="authFlip">
+                <div class="flip-inner">
+
+                    <!-- ===== FRONT: LOGIN ===== -->
+                    <section class="flip-face flip-front" aria-labelledby="loginTitle">
+                        <div class="login-head">
+                            <h2 id="loginTitle">Anmelden</h2>
+                            <p class="login-sub">Melde dich an, um fortzufahren.</p>
+                        </div>
+
+                        <form class="login-form">
+                            <label class="field">
+                                <span class="field-label">E-Mail</span>
+                                <input class="input" type="email" id="email" required autocomplete="email" />
+                            </label>
+
+                            <label class="field">
+                                <span class="field-label">Passwort</span>
+                                <input class="input" type="password" id="password" required autocomplete="current-password" />
+                            </label>
+
+                            <button type="submit" class="btn primary full">Login</button>
+
+                            <div class="login-foot">
+                                <button class="link-btn" type="button" id="forgotPwBtn">Passwort vergessen?</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- ===== BACK: FORGOT PASSWORD ===== -->
+                    <section class="flip-face flip-back" aria-labelledby="forgotTitle">
+                        <div class="login-head">
+                            <h2 id="forgotTitle">Passwort zurücksetzen</h2>
+                            <p class="login-sub">Wie lautet deine E-Mail Addresse ?</p>
+                        </div>
+
+                        <form class="login-form">
+                            <label class="field">
+                                <span class="field-label">E-Mail</span>
+                                <input class="input" type="email" id="resetEmail" required autocomplete="email" />
+                            </label>
+
+                            <button type="submit" class="btn primary full">Link senden</button>
+
+                            <div class="login-foot">
+                                <button class="link-btn" type="button" id="backToLoginBtn">Zurück zum Login</button>
+                            </div>
+                        </form>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== LOGIN MODAL END ===== -->
+</body>
+<!-- ======== BODY END ======== -->
+</html>
