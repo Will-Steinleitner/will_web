@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registrieren • Builds</title>
+    <meta name="description" content="Builds Registrierung" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="../../static/css/home.css" />
+    <!-- Register-only Styles -->
+    <link rel="stylesheet" href="../../static/css/register.css" />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Register-only JS -->
+    <script src="../../static/js/register.js" defer></script>
+</head>
+
+<body>
+
+<div class="page-content">
+    <header>
+        <div class="container nav">
+            <a class="brand" href="/">
+                <img class="logo" src="../../static/img/buildslogo.png" alt="Builds Logo" />
+                <span>Builds</span>
+            </a>
+
+            <nav class="navlinks" aria-label="Hauptnavigation">
+                <a class="navlinkWithImg" href="/#nightreign">
+                    <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                    <span>Nightreign</span>
+                </a>
+            </nav>
+
+            <div class="navcta">
+                <a class="btn secondary nav-register-small" href="/">Zurück</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container register-page">
+        <section class="register-card" aria-labelledby="registerTitle">
+            <div class="login-head">
+                <h2 id="registerTitle">Registrieren</h2>
+                <p class="login-sub">Erstelle deinen Builds-Account.</p>
+            </div>
+
+            {{if .Error}}
+            <div class="errorBox" style="margin: 0 28px 10px;">
+                {{.Error}}
+            </div>
+            {{end}}
+
+            <form class="login-form" action="/register" method="POST">
+                <label class="field">
+                    <span class="field-label">Vorname</span>
+                    <div class="input-wrapper">
+                        <i data-lucide="user" class="input-icon"></i>
+                        <input class="input with-icon" type="text" name="first_name" required />
+                    </div>
+                </label>
+
+                <label class="field">
+                    <span class="field-label">Nachname</span>
+                    <div class="input-wrapper">
+                        <i data-lucide="user-round" class="input-icon"></i>
+                        <input class="input with-icon" type="text" name="last_name" required />
+                    </div>
+                </label>
+
+                <label class="field">
+                    <span class="field-label">E-Mail</span>
+                    <div class="input-wrapper">
+                        <i data-lucide="mail" class="input-icon"></i>
+                        <input class="input with-icon" type="email" name="email" required />
+                    </div>
+                </label>
+
+                <label class="field">
+                    <span class="field-label">Passwort</span>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock" class="input-icon"></i>
+                        <input class="input with-icon" type="password" name="password" id="regPassword" required minlength="6" />
+                    </div>
+                </label>
+
+                <label class="field">
+                    <span class="field-label">Passwort wiederholen</span>
+                    <div class="input-wrapper">
+                        <i data-lucide="check" class="input-icon" id="confirmIcon"></i>
+                        <input class="input with-icon" type="password" name="confirm" id="regConfirmPassword" required minlength="6" />
+                    </div>
+                    <p class="pw-hint" id="pwHint" aria-live="polite"></p>
+                </label>
+
+                <button type="submit" class="btn primary full">Account erstellen</button>
+
+                <div class="login-foot" style="justify-content: center;">
+                    <a class="link-btn" href="/">Ich habe schon einen Account</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <span class="footer-logo">Builds</span>
+            <p class="footer-tagline">Create. Share. Dominate.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="#">Impressum</a>
+            <a href="#">Datenschutz</a>
+            <a href="#">Kontakt</a>
+            <a href="#">AGB</a>
+        </div>
+
+        <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+            <a href="#" aria-label="Youtube"><i data-lucide="youtube"></i></a>
+            <a href="#" aria-label="TikTok"><i data-lucide="music"></i></a>
+            <a href="#" aria-label="X"><i data-lucide="twitter"></i></a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        © <span id="year"></span> Builds. Alle Rechte vorbehalten.
+    </div>
+</footer>
+
+</body>
+</html>

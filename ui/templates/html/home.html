@@ -5,96 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Welcome to Builds!</title>
     <meta name="description" content="Builds" />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../static/css/home.css" />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../../static/js/home.js" defer></script>
 </head>
 
-<!-- ======== BODY START ======== -->
 <body>
-    <!-- ======== HEADER START ======== -->
-    <header>
-        <div class="container nav">
-            <a class="brand" href="/">
-                <img class="logo" src="../../static/img/buildslogo.png" alt="Builds Logo" />
-                <span>Builds</span>
+
+<header>
+    <div class="container nav">
+        <a class="brand" href="/">
+            <img class="logo" src="../../static/img/buildslogo.png" alt="Builds Logo" />
+            <span>Builds</span>
+        </a>
+
+        <nav class="navlinks" aria-label="Hauptnavigation">
+            <a class="navlinkWithImg" href="#nightreign">
+                <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                <span>Nightreign</span>
             </a>
+        </nav>
 
-            <nav class="navlinks" aria-label="Hauptnavigation">
-                <a class="navlinkWithImg" href="#nightreign">
-                    <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
-                    <span>Nightreign</span>
-                </a>
-            </nav>
-
-            <div class="navcta">
-                <button class="btn primary" type="button" id="openLogin">Anmelden</button>
-            </div>
-        </div>
-
-    </header>
-    <!-- ======== HEADER END ======== -->
-
-    <!-- ===== LOGIN MODAL START ===== -->
-    <div class="login-modal" id="loginModal" aria-hidden="true">
-        <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-            <button class="close-btn" id="closeLogin" type="button" aria-label="Schließen">&times;</button>
-
-            <div class="flip" id="authFlip">
-                <div class="flip-inner">
-
-                    <!-- ===== FRONT: LOGIN ===== -->
-                    <section class="flip-face flip-front" aria-labelledby="loginTitle">
-                        <div class="login-head">
-                            <h2 id="loginTitle">Anmelden</h2>
-                            <p class="login-sub">Melde dich an, um fortzufahren.</p>
-                        </div>
-
-                        <form class="login-form">
-                            <label class="field">
-                                <span class="field-label">E-Mail</span>
-                                <input class="input" type="email" id="email" required autocomplete="email" />
-                            </label>
-
-                            <label class="field">
-                                <span class="field-label">Passwort</span>
-                                <input class="input" type="password" id="password" required autocomplete="current-password" />
-                            </label>
-
-                            <button type="submit" class="btn primary full">Login</button>
-
-                            <div class="login-foot">
-                                <button class="link-btn" type="button" id="forgotPwBtn">Passwort vergessen?</button>
-                            </div>
-                        </form>
-                    </section>
-
-                    <!-- ===== BACK: FORGOT PASSWORD ===== -->
-                    <section class="flip-face flip-back" aria-labelledby="forgotTitle">
-                        <div class="login-head">
-                            <h2 id="forgotTitle">Passwort zurücksetzen</h2>
-                            <p class="login-sub">Wie lautet deine E-Mail Addresse ?</p>
-                        </div>
-
-                        <form class="login-form">
-                            <label class="field">
-                                <span class="field-label">E-Mail</span>
-                                <input class="input" type="email" id="resetEmail" required autocomplete="email" />
-                            </label>
-
-                            <button type="submit" class="btn primary full">Link senden</button>
-
-                            <div class="login-foot">
-                                <button class="link-btn" type="button" id="backToLoginBtn">Zurück zum Login</button>
-                            </div>
-                        </form>
-                    </section>
-
-                </div>
-            </div>
+        <div class="navcta">
+            <button class="btn primary" type="button" id="openLogin">Anmelden</button>
+            <a class="btn secondary" href="/register">Registrieren</a>
         </div>
     </div>
-    <!-- ===== LOGIN MODAL END ===== -->
+</header>
+
+<!-- ===== LOGIN MODAL START ===== -->
+<div class="login-modal" id="loginModal" aria-hidden="true">
+    <div class="login-card flip" id="authFlip" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div class="flip-inner">
+            <!-- ===== FRONT: LOGIN ===== -->
+            <section class="flip-face flip-front" aria-labelledby="loginTitle">
+                <button class="close-btn" id="closeLogin" type="button" aria-label="Schließen">&times;</button>
+
+                <div class="login-head">
+                    <h2 id="loginTitle">Anmelden</h2>
+                    <p class="login-sub">Melde dich an, um fortzufahren.</p>
+                </div>
+
+                <form class="login-form" action="/login" method="POST">
+                    <!-- EMAIL -->
+                    <label class="field">
+                        <span class="field-label">E-Mail</span>
+                        <div class="input-wrapper">
+                            <i data-lucide="mail" class="input-icon"></i>
+                            <input class="input with-icon" type="email" id="email" name="email" autocomplete="off" />
+                        </div>
+                    </label>
+
+                    <!-- PASSWORD -->
+                    <label class="field">
+                        <span class="field-label">Passwort</span>
+                        <div class="input-wrapper">
+                            <i data-lucide="lock" class="input-icon"></i>
+                            <input class="input with-icon" type="password" id="password" name="password" autocomplete="off" />
+                        </div>
+                    </label>
+
+                    <button type="submit" class="btn primary full">Login</button>
+
+                    <div class="login-foot">
+                        <button class="link-btn icon-link" type="button" id="forgotPwBtn">
+                            <i data-lucide="key-round"></i>
+                            Passwort vergessen?
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- ===== BACK: FORGOT PASSWORD ===== -->
+            <section class="flip-face flip-back" aria-labelledby="forgotTitle">
+                <button class="close-btn" type="button" data-close-login aria-label="Schließen">&times;</button>
+
+                <div class="login-head">
+                    <h2 id="forgotTitle">Passwort zurücksetzen</h2>
+                    <p class="login-sub">Wie lautet deine E-Mail Addresse?</p>
+                </div>
+
+                <form class="login-form">
+                    <!-- RESET EMAIL -->
+                    <label class="field">
+                        <span class="field-label">E-Mail</span>
+                        <div class="input-wrapper">
+                            <i data-lucide="mail-search" class="input-icon"></i>
+                            <input class="input with-icon" type="email" id="resetEmail" autocomplete="off" />
+                        </div>
+                    </label>
+
+                    <button type="submit" class="btn primary full">Link senden</button>
+
+                    <div class="login-foot">
+                        <button class="link-btn icon-link" type="button" id="backToLoginBtn">
+                            <i data-lucide="arrow-left"></i>
+                            Zurück zum Login
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </div>
+</div>
+<!-- ===== LOGIN MODAL END ===== -->
+
+<!-- ===== FOOTER START ===== -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <span class="footer-logo">Builds</span>
+            <p class="footer-tagline">Create. Share. Dominate.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="#">Impressum</a>
+            <a href="#">Datenschutz</a>
+            <a href="#">Kontakt</a>
+            <a href="#">AGB</a>
+        </div>
+
+        <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+            <a href="#" aria-label="Youtube"><i data-lucide="youtube"></i></a>
+            <a href="#" aria-label="TikTok"><i data-lucide="music"></i></a>
+            <a href="#" aria-label="X"><i data-lucide="twitter"></i></a>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        © <span id="year"></span> Builds. Alle Rechte vorbehalten.
+    </div>
+</footer>
+<!-- ===== FOOTER END ===== -->
 </body>
-<!-- ======== BODY END ======== -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.lucide) lucide.createIcons();
+        const y = document.getElementById("year");
+        if (y) y.textContent = new Date().getFullYear();
+    });
+</script>
+
 </html>

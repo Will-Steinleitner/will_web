@@ -1,7 +1,9 @@
 // ==== login ====
 const openBtn = document.getElementById("openLogin");
 const modal = document.getElementById("loginModal");
-const closeBtn = document.getElementById("closeLogin");
+
+const closeBtnFront = document.getElementById("closeLogin");
+const closeBtnBack = document.querySelector("[data-close-login]");
 
 function openModal() {
     modal.classList.add("active");
@@ -13,11 +15,18 @@ function closeModal() {
     modal.classList.remove("active");
     modal.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
-    resetFlipToLogin();
+
+    modal.addEventListener("transitionend", function handler(e) {
+        if (e.propertyName === "opacity") {
+            resetFlipToLogin();
+            modal.removeEventListener("transitionend", handler);
+        }
+    });
 }
 
 openBtn.addEventListener("click", openModal);
-closeBtn.addEventListener("click", closeModal);
+closeBtnFront.addEventListener("click", closeModal);
+closeBtnBack.addEventListener("click", closeModal);
 
 // Klick auf Overlay schließt
 modal.addEventListener("click", (e) => {
@@ -54,4 +63,13 @@ backToLoginBtn.addEventListener("click", showLogin);
 function resetFlipToLogin() {
     if (flip) flip.classList.remove("is-flipped");
 }
+
+
+// ==== Icons ====
+document.addEventListener("DOMContentLoaded", function () {
+    lucide.createIcons();
+    document.getElementById("year").textContent = new Date().getFullYear();
+});
+
+
 

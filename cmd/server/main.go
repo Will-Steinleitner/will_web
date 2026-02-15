@@ -18,7 +18,8 @@ func main() {
 	fullCache := app.TemplateCache()
 
 	templates := map[string]*template.Template{
-		"home.html": fullCache["home.html"],
+		"home.html":     fullCache["home.html"],
+		"register.html": fullCache["register.html"],
 	}
 
 	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo())
