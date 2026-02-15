@@ -179,3 +179,4 @@ SELECT * FROM users;
 7. Daten prüfen mit `SELECT * FROM users;`
 8. In Terminal: go build -o willweb.exe .\cmd\server
 9. go run ./cmd/server/
+10. setup temp server: https://dashboard.ngrok.com/get-started/setup/windows

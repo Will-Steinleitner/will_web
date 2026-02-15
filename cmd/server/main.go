@@ -21,6 +21,7 @@ func main() {
 		"home.html": fullCache["home.html"],
 	}
 
+	//bonus6725
 	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo())
 
 	fs := http.FileServer(http.Dir("./ui/static/"))
