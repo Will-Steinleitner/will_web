@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"html/template"
 	"net/http"
 	"will_web/internal/database/users"
 	"will_web/internal/models"
@@ -14,21 +13,18 @@ type IHomeController interface {
 	InsertUser(user *users.User) bool
 }
 type HomeScreenController struct {
-	templateCache map[string]*template.Template
-	homeRepo      models.HomeScreenModel
-	renderer      renderer.Renderer
+	homeRepo models.HomeScreenModel
+	renderer renderer.Renderer
 }
 
 func NewHomeScreenController(
-	templateCache map[string]*template.Template,
 	homeRepo models.HomeScreenModel,
 	renderer renderer.Renderer,
 
 ) *HomeScreenController {
 	return &HomeScreenController{
-		homeRepo:      homeRepo,
-		templateCache: templateCache,
-		renderer:      renderer,
+		homeRepo: homeRepo,
+		renderer: renderer,
 	}
 }
 
