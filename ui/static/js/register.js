@@ -27,7 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmPassword.classList.add("match-success");
         confirmPassword.classList.remove("match-error");
 
-        if (hint) hint.textContent = "Passwörter stimmen überein.";
+        hint.classList.add("match-success");
+        hint.classList.remove("match-error");
+
+        hint.textContent = "Passwörter stimmen überein.";
     }
 
     function setError() {
@@ -37,7 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmPassword.classList.add("match-error");
         confirmPassword.classList.remove("match-success");
 
-        if (hint) hint.textContent = "Passwörter stimmen nicht überein.";
+        hint.classList.add("match-error");
+        hint.classList.remove("match-success");
+
+        hint.textContent = "Passwörter stimmen nicht überein.";
     }
 
     function checkPasswords() {

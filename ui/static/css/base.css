@@ -9,6 +9,8 @@
     --brand: #7c5cff;
     --brand2:#22d3ee;
     --ok:#34d399;
+    --errColor: #ff4d4d;
+    --succColor: #34d399;
     --shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 

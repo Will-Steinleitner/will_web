@@ -1,25 +1,25 @@
 package renderer
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 )
 
-const rendererTAG = "renderer"
+const rendererTAG = "Renderer"
 
 type Renderer struct {
 	templateCache map[string]*template.Template
 }
 
 func NewRenderer() *Renderer {
-
+	log.Println(rendererTAG, ": building renderer..")
 	cache, err := newTemplateCache()
 	if err != nil {
 		log.Fatal(rendererTAG, err)
 	}
+	log.Println(rendererTAG, ": renderer built")
 
 	return &Renderer{
 		cache,
@@ -36,7 +36,7 @@ func newTemplateCache() (map[string]*template.Template, error) {
 
 	for _, page := range pages {
 		name := filepath.Base(page)
-		fmt.Printf("caching template: %s \n", name)
+		log.Println(rendererTAG, ": caching template -", name)
 
 		templateSet, err := template.ParseFiles("./ui/templates/html/base.gohtml", page)
 		if err != nil {

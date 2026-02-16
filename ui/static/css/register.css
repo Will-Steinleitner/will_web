@@ -19,9 +19,19 @@
 
 /* ================= Password Match Indicator ================= */
 .input-icon.match-success{
-    color: #34d399;
+    color: var(--succColor);
 }
 
-.input-icon.match-error{
-    color: #ff4d4d;
+.match-error{
+    color: var(--errColor);
+}
+
+.pw-hint {
+    margin-top: 7px;
+    font-size: 14px;
+    text-align: right;
+}
+
+.pw-hint.match-error {
+    color: var(--errColor);
 }

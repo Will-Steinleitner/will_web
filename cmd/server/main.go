@@ -13,8 +13,6 @@ const mainTag = "Main"
 
 func main() {
 	app := application.NewApplication()
-	defer app.Database().Close()
-
 	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo(), app.GetRenderer())
 
 	//can we refactor this ?
@@ -26,4 +24,6 @@ func main() {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(mainTag, err)
 	}
+
+	defer app.Database().Close()
 }
