@@ -12,10 +12,10 @@ type Database struct {
 const databaseTag = "Database"
 
 func NewDatabase() *Database {
+	log.Println(databaseTag, ": connecting to database..")
 	connectionString := "postgres://postgres:mysecretpassword@localhost:5432/willweb-db?sslmode=disable"
 	db, err := sql.Open("postgres", connectionString)
 
-	log.Println(databaseTag, db.Stats())
 	if err != nil {
 		log.Fatal(databaseTag, err)
 	}
@@ -23,7 +23,11 @@ func NewDatabase() *Database {
 		log.Fatal(databaseTag, err)
 	}
 
+	log.Println(databaseTag, ": database connected")
+
+	log.Println(databaseTag, ": initializing tables")
 	createTable(db)
+	log.Println(databaseTag, ": tables initialized")
 
 	return &Database{
 		db,
@@ -38,12 +42,11 @@ func (database *Database) GetDatabase() *sql.DB {
 // However, main() will not return while http.ListenAndServe is running,because it blocks and keeps the server alive.
 // Therefore, the deferred function will only run if the server stops or an error occurs.
 func (database *Database) Close() {
-	err := database.database.Close()
-	//we need our own Close func, because
-	log.Println(databaseTag, "Database connection closed")
-	if err != nil {
+	if err := database.database.Close(); err != nil {
 		log.Fatal(databaseTag, err)
 	}
+
+	log.Println(databaseTag, "database connection closed")
 }
 
 func createTable(db *sql.DB) {

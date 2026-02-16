@@ -15,13 +15,9 @@ func main() {
 	app := application.NewApplication()
 	defer app.Database().Close()
 
-	fullCache := app.TemplateCache()
-	for k := range fullCache {
-		log.Println("CACHE KEY:", k)
-	}
-
 	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo(), app.GetRenderer())
 
+	//can we refactor this ?
 	fs := http.FileServer(http.Dir("./ui/static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.Handle("/", homeCtrl)

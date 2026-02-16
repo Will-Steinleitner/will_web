@@ -1,9 +1,11 @@
 package renderer
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 const rendererTAG = "renderer"
@@ -12,22 +14,50 @@ type Renderer struct {
 	templateCache map[string]*template.Template
 }
 
-func NewRenderer(fullCache map[string]*template.Template) *Renderer {
+func NewRenderer() *Renderer {
+
+	cache, err := newTemplateCache()
+	if err != nil {
+		log.Fatal(rendererTAG, err)
+	}
+
 	return &Renderer{
-		fullCache,
+		cache,
 	}
 }
 
+func newTemplateCache() (map[string]*template.Template, error) {
+	cache := make(map[string]*template.Template)
+
+	pages, err := filepath.Glob("./ui/templates/html/*")
+	if err != nil {
+		log.Fatal(rendererTAG, err)
+	}
+
+	for _, page := range pages {
+		name := filepath.Base(page)
+		fmt.Printf("caching template: %s \n", name)
+
+		templateSet, err := template.ParseFiles("./ui/templates/html/base.gohtml", page)
+		if err != nil {
+			log.Fatal(rendererTAG, err)
+		}
+
+		cache[name] = templateSet
+	}
+
+	return cache, nil
+}
 func (renderer *Renderer) RenderTemplate(writer http.ResponseWriter, tmpl string, data interface{}) {
 	t, exists := renderer.templateCache[tmpl]
 	if !exists || t == nil {
-		http.Error(writer, "Template fehlt", http.StatusInternalServerError)
+		http.Error(writer, rendererTAG, http.StatusInternalServerError)
 		return
 	}
 
 	if err := t.ExecuteTemplate(writer, "base", data); err != nil {
-		log.Println(rendererTAG, err)
+		log.Println(rendererTAG+": template is missing", err)
 		log.Println(t.Name())
-		http.Error(writer, "Render error", http.StatusInternalServerError)
+		http.Error(writer, rendererTAG+": render error", http.StatusInternalServerError)
 	}
 }
