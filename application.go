@@ -8,6 +8,7 @@ import (
 	"will_web/internal/database"
 	"will_web/internal/database/users"
 	"will_web/internal/models"
+	"will_web/internal/renderer"
 )
 
 const applicationTag = "Application"
@@ -16,6 +17,7 @@ type Application struct {
 	fullCache map[string]*template.Template
 	homeRepo  *models.HomeScreenModel
 	database  *database.Database
+	renderer  *renderer.Renderer
 }
 
 // Constructor without a receiver (a receiver would require an existing Application instance, rather than creating one).
@@ -24,9 +26,9 @@ func NewApplication() *Application {
 	if err != nil {
 		log.Fatal(applicationTag, err)
 	}
+	renderer := renderer.NewRenderer(cache)
 
 	db := database.NewDatabase()
-
 	userDao := users.NewUserDao(db.GetDatabase())
 	homeRepo := models.NewHomeScreenModel(userDao)
 
@@ -34,6 +36,7 @@ func NewApplication() *Application {
 		fullCache: cache,
 		homeRepo:  homeRepo,
 		database:  db,
+		renderer:  renderer,
 	}
 }
 
@@ -50,7 +53,7 @@ func newTemplateCache() (map[string]*template.Template, error) {
 		name := filepath.Base(page)
 		fmt.Printf("%s \n", name)
 
-		templateSet, err := template.ParseFiles(page)
+		templateSet, err := template.ParseFiles("./ui/templates/html/base.gohtml", page)
 		if err != nil {
 			log.Fatal(applicationTag, err)
 		}
@@ -75,3 +78,4 @@ func (app *Application) GetTemplate(name string) (*template.Template, error) {
 
 	return templateSet, nil
 }
+func (app *Application) GetRenderer() renderer.Renderer { return *app.renderer }

@@ -15,25 +15,26 @@ const mainTag = "Main"
 func main() {
 	app := application.NewApplication()
 	defer app.Database().Close()
-	fullCache := app.TemplateCache()
 
-	templates := map[string]*template.Template{
-		"home.html":     fullCache["home.html"],
-		"register.html": fullCache["register.html"],
+	fullCache := app.TemplateCache()
+	for k := range fullCache {
+		log.Println("CACHE KEY:", k)
 	}
 
-	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo())
+	templates := map[string]*template.Template{
+		"base.gohtml":     fullCache["base.gohtml"],
+		"register.gohtml": fullCache["register.gohtml"],
+		"index.gohtml":    fullCache["index.gohtml"],
+	}
+
+	homeCtrl := controllers.NewHomeScreenController(templates, app.HomeRepo(), app.GetRenderer())
 
 	fs := http.FileServer(http.Dir("./ui/static/"))
-	// http.Handle registers a handler for a specific URL pattern,
-	// e.g. it routes requests like GET /static/home_register.css to the file server.
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	// handle force you to implement ServeHTTP
 	http.Handle("/", homeCtrl)
 
 	log.Println("Server startet auf http://localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(mainTag, err)
 	}
 }

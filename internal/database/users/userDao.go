@@ -5,7 +5,7 @@ import (
 )
 
 type IUserDao interface {
-	InsertUser(user *User) bool //
+	InsertUser(user *User) bool
 }
 
 type UserDao struct {

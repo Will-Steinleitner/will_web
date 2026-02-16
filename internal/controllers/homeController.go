@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"will_web/internal/database/users"
 	"will_web/internal/models"
+	"will_web/internal/renderer"
 )
 
 const homeControllerTag = "HomeController"
@@ -16,15 +16,19 @@ type IHomeController interface {
 type HomeScreenController struct {
 	templateCache map[string]*template.Template
 	homeRepo      models.HomeScreenModel
+	renderer      renderer.Renderer
 }
 
 func NewHomeScreenController(
 	templateCache map[string]*template.Template,
 	homeRepo models.HomeScreenModel,
+	renderer renderer.Renderer,
+
 ) *HomeScreenController {
 	return &HomeScreenController{
 		homeRepo:      homeRepo,
 		templateCache: templateCache,
+		renderer:      renderer,
 	}
 }
 
@@ -32,7 +36,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 	switch {
 
 	case request.Method == http.MethodGet && request.URL.Path == "/":
-		homeController.renderTemplate(writer, "home.html", struct {
+		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
 			LoggedIn bool
 			Email    string
 			Error    string
@@ -40,7 +44,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		return
 
 	case request.Method == http.MethodGet && request.URL.Path == "/register":
-		homeController.renderTemplate(writer, "register.html", struct {
+		homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
 			Error string
 		}{Error: ""})
 		return
@@ -55,7 +59,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		password := request.FormValue("password")
 
 		if email == "test@example.com" && password == "1234" {
-			homeController.renderTemplate(writer, "home.html", struct {
+			homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
 				LoggedIn bool
 				Email    string
 				Error    string
@@ -63,7 +67,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 			return
 		}
 
-		homeController.renderTemplate(writer, "home.html", struct {
+		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
 			LoggedIn bool
 			Email    string
 			Error    string
@@ -83,7 +87,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		confirm := request.FormValue("confirm")
 
 		if password != confirm {
-			homeController.renderTemplate(writer, "register.html", struct {
+			homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
 				Error string
 			}{Error: "Passwörter stimmen nicht überein"})
 			return
@@ -101,16 +105,6 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 	}
 }
 
-func (homeController *HomeScreenController) renderTemplate(writer http.ResponseWriter, name string, data any) {
-	t, exists := homeController.templateCache[name]
-	if !exists || t == nil {
-		http.Error(writer, "Template fehlt", http.StatusInternalServerError)
-		return
-	}
-	if err := t.Execute(writer, data); err != nil {
-		log.Println(homeControllerTag, err)
-	}
-}
 func (homeController *HomeScreenController) InsertUser(user *users.User) bool {
 	return homeController.homeRepo.InsertUser(user)
 }

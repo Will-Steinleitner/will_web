@@ -1,0 +1,194 @@
+{{define "base"}}
+    <!doctype html>
+    <html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>{{block "title" .}}Builds - Create! Share! Dominate!{{end}}</title>
+        <meta name="description" content="{{block "description" .}}Builds{{end}}" />
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+        <!-- Global CSS -->
+        <link rel="stylesheet" href="../../static/css/base.css" />
+
+        <!-- Page-specific CSS -->
+        {{block "head_css" .}}{{end}}
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+
+        <!-- Global JS -->
+        <script src="../../static/js/base.js" defer></script>
+
+        <!-- Page-specific JS -->
+        {{block "head_js" .}}{{end}}
+    </head>
+
+    <body>
+
+    <!-- ================= HEADER ================= -->
+    <header>
+        <div class="container nav">
+            <a class="brand" href="/">
+                <img class="logo" src="../../static/img/buildslogo.png" alt="Builds Logo" />
+                <span>builds.com</span>
+            </a>
+
+            <nav class="navlinks" aria-label="Hauptnavigation">
+                <a class="navlinkWithImg" href="/#nightreign">
+                    <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                    <span>Nightreign</span>
+                </a>
+            </nav>
+
+            <div class="navcta">
+                {{block "nav_cta" .}}
+                    {{if .LoggedIn}}
+                        <span class="user-email">{{.Email}}</span>
+                    {{else}}
+                        <button class="btn primary" type="button" id="openLogin">Anmelden</button>
+                        <a class="btn secondary" href="/register">Registrieren</a>
+                    {{end}}
+                {{end}}
+            </div>
+        </div>
+    </header>
+    <!-- ========================================== -->
+
+
+    <!-- ================= LOGIN MODAL ================= -->
+    {{block "login_modal" .}}
+        <div class="login-modal" id="loginModal" aria-hidden="true">
+            <div class="login-card flip" id="authFlip" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+                <div class="flip-inner">
+
+                    <!-- ===== LOGIN FRONT ===== -->
+                    <section class="flip-face flip-front" aria-labelledby="loginTitle">
+                        <button class="close-btn" id="closeLogin" type="button" aria-label="Schließen">&times;</button>
+
+                        <div class="login-head">
+                            <h2 id="loginTitle">Anmelden</h2>
+                            <p class="login-sub">Melde dich an, um fortzufahren.</p>
+                        </div>
+
+                        <form class="login-form" action="/login" method="POST">
+
+                            {{if .Error}}
+                                <div class="errorBox">
+                                    {{.Error}}
+                                </div>
+                            {{end}}
+
+                            <label class="field">
+                                <span class="field-label">E-Mail</span>
+                                <div class="input-wrapper">
+                                    <i data-lucide="mail" class="input-icon"></i>
+                                    <input class="input with-icon" type="email" name="email" autocomplete="off" required />
+                                </div>
+                            </label>
+
+                            <label class="field">
+                                <span class="field-label">Passwort</span>
+                                <div class="input-wrapper">
+                                    <i data-lucide="lock" class="input-icon"></i>
+                                    <input class="input with-icon" type="password" name="password" autocomplete="off" required />
+                                </div>
+                            </label>
+
+                            <button type="submit" class="btn primary full">Login</button>
+
+                            <div class="login-foot">
+                                <button class="link-btn icon-link" type="button" id="forgotPwBtn">
+                                    <i data-lucide="key-round"></i>
+                                    Passwort vergessen?
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- ===== FORGOT PASSWORD BACK ===== -->
+                    <section class="flip-face flip-back" aria-labelledby="forgotTitle">
+                        <button class="close-btn" type="button" data-close-login aria-label="Schließen">&times;</button>
+
+                        <div class="login-head">
+                            <h2 id="forgotTitle">Passwort zurücksetzen</h2>
+                            <p class="login-sub">Wie lautet deine E-Mail Adresse?</p>
+                        </div>
+
+                        <form class="login-form">
+                            <label class="field">
+                                <span class="field-label">E-Mail</span>
+                                <div class="input-wrapper">
+                                    <i data-lucide="mail-search" class="input-icon"></i>
+                                    <input class="input with-icon" type="email" id="resetEmail" autocomplete="off" />
+                                </div>
+                            </label>
+
+                            <button type="submit" class="btn primary full">Link senden</button>
+
+                            <div class="login-foot">
+                                <button class="link-btn icon-link" type="button" id="backToLoginBtn">
+                                    <i data-lucide="arrow-left"></i>
+                                    Zurück zum Login
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    {{end}}
+    <!-- ================================================= -->
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main>
+        {{block "content" .}}{{end}}
+    </main>
+    <!-- ================================================= -->
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="site-footer">
+
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="footer-logo">Builds</span>
+                <p class="footer-tagline">Create. Share. Dominate.</p>
+            </div>
+
+            <div class="footer-social">
+                <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+                <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                <a href="#" aria-label="Youtube"><i data-lucide="youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i data-lucide="music"></i></a>
+                <a href="#" aria-label="X"><i data-lucide="twitter"></i></a>
+            </div>
+        </div>
+
+        <!-- Links separat -->
+        <div class="footer-legal-links">
+            <a href="/impressum">Impressum</a>
+            <a href="/datenschutz">Datenschutz</a>
+            <a href="/kontakt">Kontakt</a>
+            <a href="/agb">AGB</a>
+        </div>
+
+        <div class="footer-bottom">
+            © <span id="year"></span> Builds. Alle Rechte vorbehalten.
+        </div>
+
+    </footer>
+
+    <!-- =========================================== -->
+
+    {{block "body_js" .}}{{end}}
+
+    </body>
+    </html>
+{{end}}
