@@ -27,11 +27,11 @@
 }
 
 .pw-hint {
-    margin-top: 7px;
-    font-size: 14px;
+    margin-top: 1px;
+    font-size: 12px;
     text-align: right;
 }
 
 .pw-hint.match-error {
-    color: var(--errColor);
+    color: rgba(var(--errColor), 0.65);
 }

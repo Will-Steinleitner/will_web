@@ -1,4 +1,3 @@
-// static/js/base.js
 (() => {
     function setupIconsAndYear() {
         if (window.lucide) lucide.createIcons();
@@ -10,11 +9,10 @@
         const openBtn = document.getElementById("openLogin");
         const modal = document.getElementById("loginModal");
 
-        // Wenn es auf der Seite kein Modal gibt: sauber raus
         if (!openBtn || !modal) return;
 
         const closeBtnFront = document.getElementById("closeLogin");
-        // kann mehrere geben (du hast data-close-login evtl. mehrfach)
+
         const closeBtnsBack = modal.querySelectorAll("[data-close-login]");
 
         const flip = document.getElementById("authFlip");
@@ -36,7 +34,6 @@
             modal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
 
-            // Flip erst nach Fade-Out resetten (wie bei dir)
             const handler = (e) => {
                 if (e.propertyName === "opacity") {
                     resetFlipToLogin();
@@ -60,18 +57,17 @@
             if (email) setTimeout(() => email.focus(), 200);
         }
 
-        // --- Event-Listener (mit Guards)
         openBtn.addEventListener("click", openModal);
 
         if (closeBtnFront) closeBtnFront.addEventListener("click", closeModal);
         closeBtnsBack.forEach((btn) => btn.addEventListener("click", closeModal));
 
-        // Overlay click -> schließen
+        // Overlay click -> close
         modal.addEventListener("click", (e) => {
             if (e.target === modal) closeModal();
         });
 
-        // ESC -> schließen
+        // ESC -> close
         document.addEventListener("keydown", (e) => {
             if (e.key === "Escape" && modal.classList.contains("active")) {
                 closeModal();

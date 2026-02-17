@@ -1,12 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Icons initialisieren
+    // Initialize icons
     if (window.lucide) lucide.createIcons();
 
-    // Jahr im Footer setzen
     const y = document.getElementById("year");
     if (y) y.textContent = new Date().getFullYear();
 
-    // Password Match Logik
     const password = document.getElementById("regPassword");
     const confirmPassword = document.getElementById("regConfirmPassword");
     const icon = document.getElementById("confirmIcon");
@@ -62,6 +60,5 @@ document.addEventListener("DOMContentLoaded", function () {
     password.addEventListener("input", checkPasswords);
     confirmPassword.addEventListener("input", checkPasswords);
 
-    // Initial check falls Browser autofill benutzt
     checkPasswords();
 });
