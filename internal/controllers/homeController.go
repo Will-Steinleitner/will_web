@@ -5,6 +5,7 @@ import (
 	"will_web/internal/database/users"
 	"will_web/internal/models"
 	"will_web/internal/renderer"
+	"will_web/internal/security"
 )
 
 const homeControllerTag = "HomeController"
@@ -13,18 +14,21 @@ type IHomeController interface {
 	InsertUser(user *users.User) bool
 }
 type HomeScreenController struct {
-	homeRepo models.HomeScreenModel
-	renderer renderer.Renderer
+	homeRepo       models.HomeScreenModel
+	renderer       renderer.Renderer
+	passwordHasher security.PasswordHasher
 }
 
 func NewHomeScreenController(
 	homeRepo models.HomeScreenModel,
 	renderer renderer.Renderer,
+	passwordHasher security.PasswordHasher,
 
 ) *HomeScreenController {
 	return &HomeScreenController{
-		homeRepo: homeRepo,
-		renderer: renderer,
+		homeRepo:       homeRepo,
+		renderer:       renderer,
+		passwordHasher: passwordHasher,
 	}
 }
 
@@ -80,6 +84,10 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		lastName := request.FormValue("last_name")
 		email := request.FormValue("email")
 		password := request.FormValue("password")
+		id, err := homeController.passwordHasher.Hash(password)
+		if err != nil {
+			return
+		}
 		confirm := request.FormValue("confirm")
 
 		if password != confirm {
@@ -89,7 +97,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 			return
 		}
 
-		user := users.NewUser(email, firstName, lastName, password)
+		user := users.NewUser(email, firstName, lastName, id)
 		homeController.InsertUser(user)
 
 		http.Redirect(writer, request, "/", http.StatusSeeOther)

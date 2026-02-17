@@ -36,9 +36,21 @@ func newTemplateCache() (map[string]*template.Template, error) {
 
 	for _, page := range pages {
 		name := filepath.Base(page)
-		log.Println(rendererTAG, ": caching template -", name)
+		var templateSet *template.Template
+		var err error
 
-		templateSet, err := template.ParseFiles("./ui/templates/html/base.gohtml", page)
+		ext := filepath.Ext(name) //end of a file e.g .gohtml or .html
+		if ext == ".gohtml" {
+			log.Println(rendererTAG, ": caching template -", name)
+			templateSet, err = template.ParseFiles(
+				"./ui/templates/html/base.gohtml",
+				page,
+			)
+		} else {
+			log.Println(rendererTAG, ": caching html -", name)
+			templateSet, err = template.ParseFiles(page)
+		}
+
 		if err != nil {
 			log.Fatal(rendererTAG, err)
 		}
@@ -59,5 +71,16 @@ func (renderer *Renderer) RenderTemplate(writer http.ResponseWriter, tmpl string
 		log.Println(rendererTAG+": template is missing", err)
 		log.Println(t.Name())
 		http.Error(writer, rendererTAG+": render error", http.StatusInternalServerError)
+	}
+}
+func (renderer *Renderer) RenderHTML(writer http.ResponseWriter, tmpl string, data interface{}) {
+	templateSet, exists := renderer.templateCache[tmpl]
+	if !exists {
+		http.Error(writer, "html fehlt", http.StatusInternalServerError)
+		return
+	}
+
+	if err := templateSet.Execute(writer, data); err != nil {
+		log.Println(rendererTAG, err)
 	}
 }

@@ -13,7 +13,7 @@ const mainTag = "Main"
 
 func main() {
 	app := application.NewApplication()
-	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo(), app.GetRenderer())
+	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo(), app.GetRenderer(), app.GetPasswordHasher())
 
 	//can we refactor this ?
 	fs := http.FileServer(http.Dir("./ui/static/"))
