@@ -2,10 +2,13 @@ package users
 
 import (
 	"database/sql"
+	"log"
+	"strings"
 )
 
 type IUserDao interface {
 	InsertUser(user *User) bool
+	UserExists(user *User) (bool, error)
 }
 
 type UserDao struct {
@@ -37,4 +40,21 @@ func (dao *UserDao) InsertUser(user *User) bool {
 	}
 
 	return true
+}
+func (dao *UserDao) UserExists(user *User) (bool, error) {
+	var exists bool
+	email := strings.TrimSpace(user.Email())
+
+	err := dao.db.QueryRow(`
+		SELECT EXISTS (
+			SELECT 1 FROM users WHERE email ILIKE $1
+		)
+	`, email).Scan(&exists)
+
+	if err != nil {
+		return false, err
+	}
+
+	log.Printf("UserExists(%q) -> %v\n", email, exists)
+	return exists, nil
 }

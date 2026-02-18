@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
+	"os/user"
 	"will_web/internal/database/users"
 	"will_web/internal/models"
 	"will_web/internal/renderer"
@@ -12,6 +14,7 @@ const homeControllerTag = "HomeController"
 
 type IHomeController interface {
 	InsertUser(user *users.User) bool
+	IUserExists(user *user.User) (bool, error)
 }
 type HomeScreenController struct {
 	homeRepo       models.HomeScreenModel
@@ -97,9 +100,17 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 			return
 		}
 
-		user := users.NewUser(email, firstName, lastName, id)
-		homeController.InsertUser(user)
+		newUser := users.NewUser(firstName, lastName, email, id)
+		userExists, err := homeController.UserExists(newUser)
+		if userExists {
+			log.Println("User already exists")
+			homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
+				Error string
+			}{Error: "E-mail already registered"})
+			return
+		}
 
+		homeController.InsertUser(newUser)
 		http.Redirect(writer, request, "/", http.StatusSeeOther)
 		return
 
@@ -111,4 +122,11 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 
 func (homeController *HomeScreenController) InsertUser(user *users.User) bool {
 	return homeController.homeRepo.InsertUser(user)
+}
+func (homeController *HomeScreenController) UserExists(user *users.User) (bool, error) {
+	exists, err := homeController.homeRepo.UserExists(user)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }
