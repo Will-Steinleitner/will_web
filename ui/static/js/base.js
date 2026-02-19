@@ -9,15 +9,23 @@
         const openBtn = document.getElementById("openLogin");
         const modal = document.getElementById("loginModal");
 
-        if (!openBtn || !modal) return;
+        if (!modal) return;
 
         const closeBtnFront = document.getElementById("closeLogin");
-
         const closeBtnsBack = modal.querySelectorAll("[data-close-login]");
 
         const flip = document.getElementById("authFlip");
         const forgotPwBtn = document.getElementById("forgotPwBtn");
         const backToLoginBtn = document.getElementById("backToLoginBtn");
+
+        const errorBox = modal.querySelector(".errorBox");
+
+        function clearError() {
+            if (errorBox) {
+                errorBox.style.display = "none";
+                errorBox.innerHTML = "";
+            }
+        }
 
         function resetFlipToLogin() {
             if (flip) flip.classList.remove("is-flipped");
@@ -33,6 +41,8 @@
             modal.classList.remove("active");
             modal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
+
+            clearError(); // ✅ Fehler beim Schließen löschen
 
             const handler = (e) => {
                 if (e.propertyName === "opacity") {
@@ -57,8 +67,7 @@
             if (email) setTimeout(() => email.focus(), 200);
         }
 
-        openBtn.addEventListener("click", openModal);
-
+        if (openBtn) openBtn.addEventListener("click", openModal);
         if (closeBtnFront) closeBtnFront.addEventListener("click", closeModal);
         closeBtnsBack.forEach((btn) => btn.addEventListener("click", closeModal));
 
@@ -76,6 +85,11 @@
 
         if (forgotPwBtn) forgotPwBtn.addEventListener("click", showForgot);
         if (backToLoginBtn) backToLoginBtn.addEventListener("click", showLogin);
+
+        // Serverseitig: Modal automatisch oeffen
+        if (modal.dataset.autoOpen === "1") {
+            openModal();
+        }
     }
 
     document.addEventListener("DOMContentLoaded", () => {

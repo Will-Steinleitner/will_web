@@ -3,7 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"os/user"
+
 	"will_web/internal/database/users"
 	"will_web/internal/models"
 	"will_web/internal/renderer"
@@ -14,8 +14,9 @@ const homeControllerTag = "HomeController"
 
 type IHomeController interface {
 	InsertUser(user *users.User) bool
-	IUserExists(user *user.User) (bool, error)
+	UserExists(user *users.User) (bool, error)
 }
+
 type HomeScreenController struct {
 	homeRepo       models.HomeScreenModel
 	renderer       renderer.Renderer
@@ -26,7 +27,6 @@ func NewHomeScreenController(
 	homeRepo models.HomeScreenModel,
 	renderer renderer.Renderer,
 	passwordHasher security.PasswordHasher,
-
 ) *HomeScreenController {
 	return &HomeScreenController{
 		homeRepo:       homeRepo,
@@ -40,16 +40,25 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 
 	case request.Method == http.MethodGet && request.URL.Path == "/":
 		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
-			LoggedIn bool
-			Email    string
-			Error    string
-		}{LoggedIn: false})
+			LoggedIn       bool
+			Email          string
+			Error          string
+			OpenLoginModal bool
+		}{
+			LoggedIn:       false,
+			Email:          "",
+			Error:          "",
+			OpenLoginModal: false,
+		})
 		return
 
 	case request.Method == http.MethodGet && request.URL.Path == "/register":
 		homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
-			Error string
-		}{Error: ""})
+			LoggedIn       bool
+			Error          string
+			OpenLoginModal bool
+			Email          string
+		}{Error: "", LoggedIn: false, OpenLoginModal: false, Email: ""})
 		return
 
 	case request.Method == http.MethodPost && request.URL.Path == "/login":
@@ -60,21 +69,43 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 
 		email := request.FormValue("email")
 		password := request.FormValue("password")
+		_ = password // TODO: check password
 
-		if email == "test@example.com" && password == "1234" {
-			homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
-				LoggedIn bool
-				Email    string
-				Error    string
-			}{LoggedIn: true, Email: email})
+		u, err := homeController.homeRepo.GetUserByEmail(email)
+		if err != nil {
+			// db down
+			http.Error(writer, "internal error", http.StatusInternalServerError)
 			return
 		}
 
+		if u == nil {
+			log.Printf("UserExists(%q) -> %v\n", email, u)
+			homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
+				LoggedIn       bool
+				Email          string
+				Error          string
+				OpenLoginModal bool
+			}{
+				LoggedIn:       false,
+				Email:          email,
+				Error:          "Unbekannte E-Mail oder falsches Passwort.",
+				OpenLoginModal: true,
+			})
+			return
+		}
+
+		log.Printf("UserExists(%q) -> %v\n", email, u.Email())
 		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
-			LoggedIn bool
-			Email    string
-			Error    string
-		}{LoggedIn: false, Error: "Login fehlgeschlagen"})
+			LoggedIn       bool
+			Email          string
+			Error          string
+			OpenLoginModal bool
+		}{
+			LoggedIn:       true,
+			Email:          email,
+			Error:          "",
+			OpenLoginModal: false,
+		})
 		return
 
 	case request.Method == http.MethodPost && request.URL.Path == "/register":
@@ -102,6 +133,10 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 
 		newUser := users.NewUser(firstName, lastName, email, id)
 		userExists, err := homeController.UserExists(newUser)
+		if err != nil {
+			http.Error(writer, "internal error", http.StatusInternalServerError)
+			return
+		}
 		if userExists {
 			log.Println("User already exists")
 			homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
@@ -123,6 +158,7 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 func (homeController *HomeScreenController) InsertUser(user *users.User) bool {
 	return homeController.homeRepo.InsertUser(user)
 }
+
 func (homeController *HomeScreenController) UserExists(user *users.User) (bool, error) {
 	exists, err := homeController.homeRepo.UserExists(user)
 	if err != nil {

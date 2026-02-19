@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Global CSS -->
-        <link rel="stylesheet" href="../../static/css/base.css" />
+        <link rel="stylesheet" href="../../static/css/base.css?v=9" />
 
         <!-- Page-specific CSS -->
         {{block "head_css" .}}{{end}}
@@ -21,7 +21,7 @@
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Global JS -->
-        <script src="../../static/js/base.js" defer></script>
+        <script src="../../static/js/base.js?v=9" defer></script>
 
         <!-- Page-specific JS -->
         {{block "head_js" .}}{{end}}
@@ -61,7 +61,7 @@
 
     <!-- ================= LOGIN MODAL ================= -->
     {{block "login_modal" .}}
-        <div class="login-modal" id="loginModal" aria-hidden="true">
+        <div class="login-modal" id="loginModal" aria-hidden="true" {{if .OpenLoginModal}}data-auto-open="1"{{end}}>
             <div class="login-card flip" id="authFlip" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
                 <div class="flip-inner">
 
@@ -86,7 +86,15 @@
                                 <span class="field-label">E-Mail</span>
                                 <div class="input-wrapper">
                                     <i data-lucide="mail" class="input-icon"></i>
-                                    <input class="input with-icon" type="email" name="email" autocomplete="off" required />
+                                    <input
+                                            class="input with-icon"
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            autocomplete="off"
+                                            required
+                                            value="{{.Email}}"
+                                    />
                                 </div>
                             </label>
 
@@ -173,10 +181,10 @@
 
         <!-- Links separat -->
         <div class="footer-legal-links">
-            <a href="/impressum">Impressum</a>
-            <a href="/datenschutz">Datenschutz</a>
-            <a href="/kontakt">Kontakt</a>
-            <a href="/agb">AGB</a>
+            <a href="#">Impressum</a>
+            <a href="#">Datenschutz</a>
+            <a href="#">Kontakt</a>
+            <a href="#">AGB</a>
         </div>
 
         <div class="footer-bottom">

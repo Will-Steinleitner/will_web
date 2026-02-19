@@ -2,6 +2,7 @@ package users
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"strings"
 )
@@ -9,6 +10,7 @@ import (
 type IUserDao interface {
 	InsertUser(user *User) bool
 	UserExists(user *User) (bool, error)
+	GetUserByEmail(user *User) (string, error)
 }
 
 type UserDao struct {
@@ -57,4 +59,27 @@ func (dao *UserDao) UserExists(user *User) (bool, error) {
 
 	log.Printf("UserExists(%q) -> %v\n", email, exists)
 	return exists, nil
+}
+func (dao *UserDao) GetUserByEmail(email string) (*User, error) {
+	query := `
+		SELECT first_name, last_name, email, password
+		FROM users
+		WHERE email ILIKE $1
+		LIMIT 1
+	`
+	var firstName, lastName, userEmail, password string
+
+	err := dao.db.QueryRow(query, strings.TrimSpace(email)).
+		Scan(&firstName, &lastName, &userEmail, &password)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	user := NewUser(firstName, lastName, userEmail, password)
+
+	return user, nil
 }
