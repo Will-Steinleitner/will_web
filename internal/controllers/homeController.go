@@ -69,7 +69,6 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 
 		email := request.FormValue("email")
 		password := request.FormValue("password")
-		_ = password // TODO: check password
 
 		u, err := homeController.homeRepo.GetUserByEmail(email)
 		if err != nil {
@@ -95,16 +94,32 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		}
 
 		log.Printf("UserExists(%q) -> %v\n", email, u.Email())
+		validUser, err := homeController.passwordHasher.Verify(u.Password(), password)
+		if validUser {
+			homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
+				LoggedIn       bool
+				Email          string
+				Error          string
+				OpenLoginModal bool
+			}{
+				LoggedIn:       true,
+				Email:          email,
+				Error:          "",
+				OpenLoginModal: false,
+			})
+			return
+		}
+
 		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
 			LoggedIn       bool
 			Email          string
 			Error          string
 			OpenLoginModal bool
 		}{
-			LoggedIn:       true,
-			Email:          email,
-			Error:          "",
-			OpenLoginModal: false,
+			LoggedIn:       false,
+			Email:          "",
+			Error:          "password incorrect",
+			OpenLoginModal: true,
 		})
 		return
 
