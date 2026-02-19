@@ -140,7 +140,10 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		if userExists {
 			log.Println("User already exists")
 			homeController.renderer.RenderTemplate(writer, "register.gohtml", struct {
-				Error string
+				LoggedIn       bool
+				Email          string
+				OpenLoginModal bool
+				Error          string
 			}{Error: "E-mail already registered"})
 			return
 		}
