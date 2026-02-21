@@ -80,6 +80,15 @@
     letter-spacing: 0.8px;
 }
 
+/*.input-wrapper:hover {*/
+/*    transform: translateY(-2px);*/
+/*    background: rgba(255,255,255,0);*/
+/*}*/
+/*.field:hover .input-icon {*/
+/*    transform: translateY(-2px);*/
+/*    background: rgba(255,255,255,0);*/
+/*}*/
+
 /* ================= NAV CTA BUTTONS ================= */
 .navcta{
     display: flex;
@@ -155,6 +164,9 @@ a{ color:inherit; text-decoration:none; }
     transition: all .18s ease;
     cursor:pointer;
 }
+.btn-header{
+    padding: unset;
+}
 
 .btn.primary{
     border-color: rgba(124,92,255,.45);
@@ -166,6 +178,11 @@ a{ color:inherit; text-decoration:none; }
 .btn:hover{
     transform: translateY(-2px);
     background: rgba(255,255,255,.08);
+}
+
+.search-wrapper {
+    display: flex;
+    width: 17%;
 }
 
 /* ================= HEADER ================= */
@@ -213,8 +230,8 @@ header{
 }
 
 .logo{
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     object-fit: contain;
     display: block;
     transition: transform .2s ease, filter .2s ease;
@@ -504,6 +521,7 @@ main{ padding: 44px 0 60px; }
 .field{
     display: grid;
     gap: 6px;
+    width: 100%
 }
 
 .field-label{
@@ -557,6 +575,7 @@ main{ padding: 44px 0 60px; }
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%
 }
 
 .with-icon{
@@ -728,4 +747,11 @@ body{
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+}
+
+.btn.transparent {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
 }

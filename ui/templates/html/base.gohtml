@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Global CSS -->
-        <link rel="stylesheet" href="../../static/css/base.css?v=9" />
+        <link rel="stylesheet" href="../../static/css/base.css?v=15" />
 
         <!-- Page-specific CSS -->
         {{block "head_css" .}}{{end}}
@@ -32,10 +32,32 @@
     <!-- ================= HEADER ================= -->
     <header>
         <div class="container nav">
-            <a class="brand" href="/">
-                <img class="logo" src="../../static/img/buildslogo.png" alt=""/>
-                <span>builds.com</span>
-            </a>
+{{/*            <a class="brand" href="/">*/}}
+{{/*                <img class="logo" src="../../static/img/buildslogo.png" alt=""/>*/}}
+{{/*                <span>builds.com</span>*/}}
+{{/*            </a>*/}}
+
+            <div class="search-wrapper" >
+                <button class="btn btn-header transparent" >
+                    <a class="brand" href="/">
+                        <img class="logo" src="../../static/img/buildslogo.png" alt=""/>
+                        <span></span>
+                    </a>
+                </button>
+                <label class="field">
+                    <div class="input-wrapper">
+                        <i data-lucide="search" class="input-icon"></i>
+                        <input
+                                class="input with-icon"
+                                type="email"
+                                id="email"
+                                name="email"
+                                autocomplete="off"
+                                required
+                        />
+                    </div>
+                </label>
+            </div>
 
             <nav class="navlinks" aria-label="Hauptnavigation">
                 <a class="navlinkWithImg" href="/#nightreign">

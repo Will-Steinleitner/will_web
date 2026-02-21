@@ -20,6 +20,8 @@
 
         const errorBox = modal.querySelector(".errorBox");
 
+        const searchGame = document.getElementById("searchGame")
+
         function clearError() {
             if (errorBox) {
                 errorBox.style.display = "none";
@@ -90,6 +92,8 @@
         if (modal.dataset.autoOpen === "1") {
             openModal();
         }
+
+
     }
 
     document.addEventListener("DOMContentLoaded", () => {
