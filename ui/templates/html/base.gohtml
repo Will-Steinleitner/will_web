@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Global CSS -->
-        <link rel="stylesheet" href="../../static/css/base.css?v=17" />
+        <link rel="stylesheet" href="../../static/css/base.css?v=23" />
 
         <!-- Page-specific CSS -->
         {{block "head_css" .}}{{end}}
@@ -21,13 +21,27 @@
         <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Global JS -->
-        <script src="../../static/js/base.js?v=9" defer></script>
+        <script src="../../static/js/base.js?v=23" defer></script>
 
         <!-- Page-specific JS -->
         {{block "head_js" .}}{{end}}
+
+        <!-- Locked (not logged-in) styles -->
+        <style>
+            .locked {
+                opacity: 0.55;
+                cursor: pointer;
+            }
+            .locked img {
+                filter: grayscale(70%);
+            }
+            .locked:hover {
+                opacity: 0.75;
+            }
+        </style>
     </head>
 
-    <body>
+    <body data-logged-in="{{if .LoggedIn}}1{{else}}0{{end}}">
 
     <!-- ================= HEADER ================= -->
     <header>
@@ -39,6 +53,7 @@
                         <span></span>
                     </a>
                 </button>
+
                 <label class="field">
                     <div class="input-wrapper">
                         <i data-lucide="search" class="input-icon"></i>
@@ -46,38 +61,92 @@
                                 class="input search-input with-icon"
                                 type="text"
                                 id="searchInput"
-                                placeholder="search for game"
+                                placeholder="Search for game"
                                 name="search"
                                 autocomplete="off"
                                 required
                         />
                     </div>
+
                     <div class="game-list-div" type="search-game">
-                        <a class="navlinkWithImgSearchbar search-item search-icon" href="/#nightreign">
-                            <i data-lucide="diamond-plus"></i>
-                            <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                        <a class="navlinkWithImgSearchbar search-item search-icon {{if not .LoggedIn}}locked{{end}}"
+                           {{if .LoggedIn}}href="/#nightreign"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                            <i data-lucide="diamond-plus"
+                               {{if not .LoggedIn}}onclick="return requireLogin(event)"{{end}}></i>
+                            <img class="navImg nightreign" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
                             <span>Nightreign</span>
                         </a>
-                        <a class="navlinkWithImgSearchbar search-item search-icon" href="/#league_of_legends">
+
+                        <a class="navlinkWithImgSearchbar search-item search-icon {{if not .LoggedIn}}locked{{end}}"
+                           {{if .LoggedIn}}href="/#league_of_legends"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
                             <i data-lucide="diamond-plus"></i>
-                            <img class="navImg" src="../../static/img/league.jpg" alt="" aria-hidden="true" />
+                            <img class="navImg league-of-legends" src="../../static/img/league.jpg" alt="" aria-hidden="true" />
                             <span>League of Legends</span>
+                        </a>
+
+                        <a class="navlinkWithImgSearchbar search-item search-icon {{if not .LoggedIn}}locked{{end}}"
+                           {{if .LoggedIn}}href="/#corepunk"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                            <i data-lucide="diamond-plus"></i>
+                            <img class="navImg corepunk" src="../../static/img/corepunk.jpg" alt="" aria-hidden="true" />
+                            <span>Corepunk</span>
+                        </a>
+
+                        <a class="navlinkWithImgSearchbar search-item search-icon {{if not .LoggedIn}}locked{{end}}"
+                           {{if .LoggedIn}}href="/#world_of_warcraft_midnight"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                            <i data-lucide="diamond-plus"></i>
+                            <img class="navImg midnight" src="../../static/img/midnight.jpg" alt="" aria-hidden="true" />
+                            <span>World of Warcraft</span>
+                        </a>
+
+                        <a class="navlinkWithImgSearchbar search-item search-icon {{if not .LoggedIn}}locked{{end}}"
+                           {{if .LoggedIn}}href="/#teamfight_tactics"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                            <i data-lucide="diamond-plus"></i>
+                            <img class="navImg tft" src="../../static/img/tft.jpg" alt="" aria-hidden="true" />
+                            <span>Teamfight Tactics</span>
                         </a>
                     </div>
                 </label>
             </div>
 
+            <!-- Topbar nav links (always visible; locked when not logged in) -->
             <nav class="navlinks" aria-label="Hauptnavigation">
-                <a class="navlinkWithImg" href="/#nightreign">
-                    <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                <a class="navlinkWithImg nightreign {{if not .LoggedIn}}locked{{end}}"
+                   {{if .LoggedIn}}href="/#nightreign"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                    <img class="navImg nightreign" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
                     <span>Nightreign</span>
+                </a>
+
+                <a class="navlinkWithImg league-of-legends {{if not .LoggedIn}}locked{{end}}"
+                   {{if .LoggedIn}}href="/#leauge_of_legends"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                    <img class="navImg league-of-legends" src="../../static/img/league.jpg" alt="" aria-hidden="true" />
+                    <span>League of Legends</span>
+                </a>
+
+                <a class="navlinkWithImg corepunk {{if not .LoggedIn}}locked{{end}}"
+                   {{if .LoggedIn}}href="/#corepunk"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                    <img class="navImg corepunk" src="../../static/img/corepunk.jpg" alt="" aria-hidden="true" />
+                    <span>Corepunk</span>
+                </a>
+
+                <a class="navlinkWithImg midnight {{if not .LoggedIn}}locked{{end}}"
+                   {{if .LoggedIn}}href="/#world_of_warcraft_midnight"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                    <img class="navImg midnight" src="../../static/img/midnight.jpg" alt="" aria-hidden="true" />
+                    <span>World of Warcraft</span>
+                </a>
+
+                <a class="navlinkWithImg tft {{if not .LoggedIn}}locked{{end}}"
+                   {{if .LoggedIn}}href="/#teamfight_tactics"{{else}}href="#" onclick="return requireLogin(event)"{{end}}>
+                    <img class="navImg tft" src="../../static/img/tft.jpg" alt="" aria-hidden="true" />
+                    <span>Teamfight Tactics</span>
                 </a>
             </nav>
 
             <div class="navcta">
                 {{block "nav_cta" .}}
                     {{if .LoggedIn}}
-                        <span class="user-email">{{.Email}}</span>
+{{/*                        <span class="user-email">{{.Email}}</span>*/}}
+                        <a class="btn primary" href="#">Profil</a>
+                        <a class="btn secondary" href="/">Logout</a>
                     {{else}}
                         <button class="btn primary" type="button" id="openLogin">Anmelden</button>
                         <a class="btn secondary" href="/register">Registrieren</a>
@@ -88,6 +157,25 @@
     </header>
     <!-- ========================================== -->
 
+    <!-- ================= Toast ================= -->
+    <div class="toast toast-success">
+        <div class="toast-icon">✓</div>
+        <div>
+            <div class="toast-title">Game Added</div>
+            <div class="toast-message">
+                You can add 3 more games before reaching the limit.
+            </div>
+        </div>
+    </div>
+    <div class="toast toast-error">
+        <div class="toast-icon">✕</div>
+        <div>
+            <div class="toast-title">Maximum Reached</div>
+            <div class="toast-message">
+                You have reached the maximum number of games allowed.
+            </div>
+        </div>
+    </div>
 
     <!-- ================= LOGIN MODAL ================= -->
     {{block "login_modal" .}}

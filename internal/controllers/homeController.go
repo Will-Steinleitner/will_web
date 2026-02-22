@@ -11,6 +11,7 @@ import (
 )
 
 const homeControllerTag = "HomeController"
+const maxTopbarGames = 4
 
 type IHomeController interface {
 	InsertUser(user *users.User) bool
@@ -44,11 +45,29 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 			Email          string
 			Error          string
 			OpenLoginModal bool
+			RemainingGames int
 		}{
 			LoggedIn:       false,
 			Email:          "",
 			Error:          "",
 			OpenLoginModal: false,
+			RemainingGames: 0,
+		})
+		return
+
+	case request.Method == http.MethodPost && request.URL.Path == "/":
+		homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
+			LoggedIn       bool
+			Email          string
+			Error          string
+			OpenLoginModal bool
+			RemainingGames int
+		}{
+			LoggedIn:       false,
+			Email:          "",
+			Error:          "",
+			OpenLoginModal: false,
+			RemainingGames: 0,
 		})
 		return
 

@@ -4,7 +4,6 @@
         const year = document.getElementById("year");
         if (year) year.textContent = new Date().getFullYear();
     }
-
     function setupLoginModal() {
         const openBtn = document.getElementById("openLogin");
         const modal = document.getElementById("loginModal");
@@ -19,8 +18,6 @@
         const backToLoginBtn = document.getElementById("backToLoginBtn");
 
         const errorBox = modal.querySelector(".errorBox");
-
-        const searchGame = document.getElementById("searchGame")
 
         function clearError() {
             if (errorBox) {
@@ -44,7 +41,7 @@
             modal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
 
-            clearError(); // ✅ Fehler beim Schließen löschen
+            clearError();
 
             const handler = (e) => {
                 if (e.propertyName === "opacity") {
@@ -93,19 +90,115 @@
             openModal();
         }
     }
+    function showToast(type, duration = 1000) {
 
-    function searchGame() {
-        const input = document.getElementById("searchGame")
+        const toast = document.querySelector(`.toast-${type}`);
+        if (!toast) return;
 
-        input.addEventListener("input", function() {
-            console.log(input.value);
-        })
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, duration);
+    }
+    function setupGameAddIcons() {
+        const container = document.querySelector('.game-list-div[type="search-game"]');
+        const searchInput = document.querySelector(".search-input");
+        if (!container) return;
+
+        const isLoggedInNow = () => document.body?.dataset?.loggedIn === "1";
+
+        document.querySelectorAll('[data-lucide="diamond-plus"]')
+            .forEach(icon => {
+
+                icon.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+
+                    if (!isLoggedInNow()) {
+                        window.requireLogin?.(e);
+                        return;
+                    }
+
+                    const item = icon.closest("a");
+                    if (!item) return;
+
+                    const gameClass = item.querySelector(".navImg")?.classList?.[1];
+                    if (!gameClass) return;
+
+                    const navbarItem = document.querySelector(`.navlinks .${gameClass}`);
+                    if (!navbarItem) return;
+
+                    const isAlreadyActive = navbarItem.classList.contains("is-active");
+                    const activeCount = document.querySelectorAll('.navlinks .navlinkWithImg.is-active').length;
+
+                    if (!isAlreadyActive && activeCount >= 4) {
+                        showToast("error");
+                        return;
+                    }
+
+                    icon.classList.toggle("active");
+                    navbarItem.classList.toggle("is-active");
+
+                    if (!isAlreadyActive) {
+                        container.prepend(item);
+                        showToast("success");
+                    } else {
+                        const activeItems = Array.from(container.querySelectorAll("a"))
+                            .filter(a => a.querySelector('[data-lucide="diamond-plus"].active'));
+
+                        if (activeItems.length === 0) {
+                            container.appendChild(item);
+                        } else {
+                            activeItems[activeItems.length - 1].after(item);
+                        }
+
+                        if (searchInput) searchInput.focus();
+                    }
+                }, true);
+            });
+    }
+    function setupGameSearchFilter() {
+        const input = document.getElementById("searchInput");
+        const list = document.querySelector('.game-list-div[type="search-game"]');
+        if (!input || !list) return;
+
+        const items = Array.from(list.querySelectorAll("a.search-item"));
+
+        const filter = () => {
+            const q = input.value.trim().toLowerCase();
+
+            items.forEach(a => {
+                const text = (a.querySelector("span")?.textContent || "").toLowerCase();
+                a.style.display = text.includes(q) ? "" : "none";
+            });
+        };
+
+        input.addEventListener("input", filter);
+        filter();
     }
 
+    window.requireLogin = function (e) {
+        if (e) e.preventDefault();
 
+        const openBtn = document.getElementById("openLogin");
+        if (openBtn) {
+            openBtn.click();
+            return false;
+        }
+
+        const modal = document.getElementById("loginModal");
+        if (modal) {
+            modal.setAttribute("aria-hidden", "false");
+            modal.classList.add("open");
+        }
+        return false;
+    };
     document.addEventListener("DOMContentLoaded", () => {
         setupIconsAndYear();
         setupLoginModal();
-        searchGame();
+        setupGameAddIcons();
+        setupGameSearchFilter();
     });
 })();

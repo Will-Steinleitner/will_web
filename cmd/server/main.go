@@ -13,16 +13,22 @@ const mainTag = "Main"
 
 func main() {
 	app := application.NewApplication()
-	homeCtrl := controllers.NewHomeScreenController(app.HomeRepo(), app.GetRenderer(), app.GetPasswordHasher())
+	homeCtrl := controllers.NewHomeScreenController(
+		app.HomeRepo(),
+		app.GetRenderer(),
+		app.GetPasswordHasher(),
+	)
 
 	//can we refactor this ?
 	fs := http.FileServer(http.Dir("./ui/static/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	http.Handle("/", homeCtrl)
+	mux := http.NewServeMux()
 
-	log.Println("Server startet auf http://localhost:8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal(mainTag, err)
+	mux.Handle("/static/", http.StripPrefix("/static/", fs))
+	mux.Handle("/", homeCtrl)
+
+	log.Println("Starting server on :8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatalf("%s: %v", mainTag, err)
 	}
 
 	defer app.Database().Close()

@@ -50,9 +50,11 @@ func (database *Database) Close() {
 }
 
 func createTable(db *sql.DB) {
-	query := `
-	DROP TABLE IF EXISTS users;
 
+	dropTopbar := `-- DROP TABLE IF EXISTS topbar_games;`
+	dropUsers := `DROP TABLE IF EXISTS users CASCADE;`
+
+	createUsers := `
 	CREATE TABLE users (
 		id BIGSERIAL PRIMARY KEY,
 		first_name VARCHAR(100) NOT NULL,
@@ -60,9 +62,30 @@ func createTable(db *sql.DB) {
 		email VARCHAR(255) NOT NULL UNIQUE,
 		password VARCHAR(255) NOT NULL,
 		created_at TIMESTAMP DEFAULT NOW()
-	);
-`
-	if _, err := db.Exec(query); err != nil {
-		log.Fatal(err)
+	);`
+
+	//createTopbar := `
+	//CREATE TABLE test_table (
+	//	id BIGSERIAL PRIMARY KEY,
+	//	user_id BIGINT NOT NULL,
+	//	game_name VARCHAR(100) NOT NULL,
+	//	created_at TIMESTAMP DEFAULT NOW(),
+	//	CONSTRAINT fk_user
+	//		FOREIGN KEY (user_id)
+	//		REFERENCES users(id)
+	//		ON DELETE CASCADE
+	//);`
+
+	queries := []string{
+		dropTopbar,
+		dropUsers,
+		createUsers,
+		//createTopbar,
+	}
+
+	for _, q := range queries {
+		if _, err := db.Exec(q); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
