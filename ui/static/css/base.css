@@ -21,6 +21,36 @@
     display: inline-flex;
     align-items: center;
     gap: 0.6vw;
+    width: 100%;
+}
+/*.navlinkWithImgSearchbar{*/
+/*    position: relative;*/
+/*    display: inline-flex;*/
+/*    align-items: center;*/
+/*    gap: 0.6vw;*/
+/*    width: 100%;*/
+/*}*/
+.navlinkWithImgSearchbar{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    padding: 5px 14px;
+
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.04);
+
+    transition: background .15s ease,
+    border-color .15s ease,
+    transform .15s ease;
+}
+
+.navlinkWithImgSearchbar:hover{
+    background: rgba(255,255,255,.08);
+    border-color: rgba(124,92,255,.35);
+    transform: translateY(-1px);
 }
 
 .navImg{
@@ -519,6 +549,7 @@ main{ padding: 44px 0 60px; }
 }
 
 .field{
+    position: relative;
     display: grid;
     gap: 6px;
     width: 100%
@@ -754,4 +785,82 @@ body{
     border: none !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
+}
+
+.field:focus-within .game-list-div{
+    position:absolute;
+    left:0;
+    top:95%;
+    width:100%;
+    display:grid;
+
+    margin-top: -7.5px;
+    gap: 2px;
+
+    padding: 8px;
+    border-radius: 0 0 18px 18px;
+    border: 1px solid rgba(124,92,255,.05);
+    /*background: rgba(7,10,20,.85);*/
+    /*background: linear-gradient(*/
+    /*        180deg,*/
+    /*        rgba(11,16,32,.96) 0%,*/
+    /*        rgba(124,92,255,.08) 65%,*/
+    /*        rgba(34,211,238,.05) 100%*/
+    /*);*/
+    background: linear-gradient(
+            180deg,
+            rgba(124,92,255,.08) 0%,
+            rgba(34,211,238,.05) 35%,
+            rgba(11,16,32,.96) 100%
+    );
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px rgba(0,0,0,.45);
+
+    z-index: 999;
+}
+
+.field:focus-within .input.search-input{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+}
+
+.search-item svg {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    opacity: 0.6;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.search-item:hover svg {
+    transform: scale(1.5);
+}
+
+.search-item [data-lucide="diamond-plus"]{
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    opacity: .3;
+    transition: opacity .2s ease, transform .2s ease;
+    cursor: pointer;
+    transform: scale(1.0);
+}
+
+.search-item [data-lucide="diamond-plus"]:hover{
+    opacity: 1;
+}
+
+.game-list-div {
+    display: none;
+}
+
+.lucide.lucide-diamond-plus {
+    opacity: 30%;
+}
+
+.lucide-diamond-plus:hover {
+    opacity: 100%;
 }

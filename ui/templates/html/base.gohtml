@@ -12,7 +12,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Global CSS -->
-        <link rel="stylesheet" href="../../static/css/base.css?v=15" />
+        <link rel="stylesheet" href="../../static/css/base.css?v=17" />
 
         <!-- Page-specific CSS -->
         {{block "head_css" .}}{{end}}
@@ -32,11 +32,6 @@
     <!-- ================= HEADER ================= -->
     <header>
         <div class="container nav">
-{{/*            <a class="brand" href="/">*/}}
-{{/*                <img class="logo" src="../../static/img/buildslogo.png" alt=""/>*/}}
-{{/*                <span>builds.com</span>*/}}
-{{/*            </a>*/}}
-
             <div class="search-wrapper" >
                 <button class="btn btn-header transparent" >
                     <a class="brand" href="/">
@@ -48,13 +43,26 @@
                     <div class="input-wrapper">
                         <i data-lucide="search" class="input-icon"></i>
                         <input
-                                class="input with-icon"
-                                type="email"
-                                id="email"
-                                name="email"
+                                class="input search-input with-icon"
+                                type="text"
+                                id="searchInput"
+                                placeholder="search for game"
+                                name="search"
                                 autocomplete="off"
                                 required
                         />
+                    </div>
+                    <div class="game-list-div" type="search-game">
+                        <a class="navlinkWithImgSearchbar search-item search-icon" href="/#nightreign">
+                            <i data-lucide="diamond-plus"></i>
+                            <img class="navImg" src="../../static/img/nightreign.jpg" alt="" aria-hidden="true" />
+                            <span>Nightreign</span>
+                        </a>
+                        <a class="navlinkWithImgSearchbar search-item search-icon" href="/#league_of_legends">
+                            <i data-lucide="diamond-plus"></i>
+                            <img class="navImg" src="../../static/img/league.jpg" alt="" aria-hidden="true" />
+                            <span>League of Legends</span>
+                        </a>
                     </div>
                 </label>
             </div>

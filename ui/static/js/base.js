@@ -92,12 +92,20 @@
         if (modal.dataset.autoOpen === "1") {
             openModal();
         }
-
-
     }
+
+    function searchGame() {
+        const input = document.getElementById("searchGame")
+
+        input.addEventListener("input", function() {
+            console.log(input.value);
+        })
+    }
+
 
     document.addEventListener("DOMContentLoaded", () => {
         setupIconsAndYear();
         setupLoginModal();
+        searchGame();
     });
 })();
