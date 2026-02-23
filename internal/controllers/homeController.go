@@ -11,7 +11,6 @@ import (
 )
 
 const homeControllerTag = "HomeController"
-const maxTopbarGames = 4
 
 type IHomeController interface {
 	InsertUser(user *users.User) bool
