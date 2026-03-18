@@ -1,8 +1,6 @@
 Go Web Project - Overview
 ---
 
-
-
 ## 🔤 Naming Conventions in Go
 ### PascalCase und camelCase
 -   **PascalCase** → Public (exported)\

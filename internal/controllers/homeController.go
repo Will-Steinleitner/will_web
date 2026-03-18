@@ -90,6 +90,8 @@ func (homeController *HomeScreenController) ServeHTTP(writer http.ResponseWriter
 		email := request.FormValue("email")
 		password := request.FormValue("password")
 
+		log.Println(email, password)
+
 		if email == "test@example.de" && password == "123" {
 			homeController.renderer.RenderTemplate(writer, "base.gohtml", struct {
 				LoggedIn       bool
